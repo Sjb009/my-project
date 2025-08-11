@@ -3,7 +3,7 @@ name: Jira Integration
 on:
   push:
     branches:
-      - main   # Runs when you push changes to main
+      - master  # Runs when you push changes to main
   workflow_dispatch:
   schedule:
     - cron: '0 * * * *' # Runs every hour
