@@ -28,7 +28,7 @@ jobs:
           echo "OCEAN__EVENT_LISTENER={\"type\":\"ONCE\"}" >> .sail-env
           echo "OCEAN__INITIALIZE_PORT_RESOURCES=true" >> .sail-env
           
-          echo "OCEAN__INTEGRATION__CONFIG__JIRA_HOST=sjayb.atlassian.net" >> .sail-env
+          echo "OCEAN__INTEGRATION__CONFIG__JIRA_HOST=https://sjayb.atlassian.net" >> .sail-env
           echo "OCEAN__INTEGRATION__CONFIG__ATLASSIAN_USER_EMAIL=${{ secrets.ATLASSIAN_USER_EMAIL }}" >> .sail-env
           echo "OCEAN__INTEGRATION__CONFIG__ATLASSIAN_USER_TOKEN=${{ secrets.ATLASSIAN_USER_TOKEN }}" >> .sail-env
 
