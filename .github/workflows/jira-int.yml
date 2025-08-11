@@ -14,14 +14,24 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: Run Jira Integration
-        uses: port-labs/ocean-sail@v1
-        with:
-          type: jira
-          port_client_id: ${{ secrets.PORT_CLIENT_ID }}
-          port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
-          port_base_url: "https://api.port.io"
-          config: |
-            jira_host: "ENTER VALUE HERE"
-            atlassian_user_email: ${{ secrets.ATLASSIAN_USER_EMAIL }}
-            atlassian_user_token: ${{ secrets.ATLASSIAN_USER_TOKEN }}
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Run Jira Integration  
+        run: |
+          image_name="ghcr.io/port-labs/port-ocean-jira:latest"
+          
+          echo "OCEAN__PORT__CLIENT_ID=${{ secrets.PORT_CLIENT_ID }}" >> .sail-env
+          echo "OCEAN__PORT__CLIENT_SECRET=${{ secrets.PORT_CLIENT_SECRET }}" >> .sail-env
+          echo "OCEAN__PORT__BASE_URL=https://api.port.io" >> .sail-env
+          
+          echo "OCEAN__EVENT_LISTENER={\"type\":\"ONCE\"}" >> .sail-env
+          echo "OCEAN__INITIALIZE_PORT_RESOURCES=true" >> .sail-env
+          
+          echo "OCEAN__INTEGRATION__CONFIG__JIRA_HOST=${{ secrets.JIRA_HOST }}" >> .sail-env
+          echo "OCEAN__INTEGRATION__CONFIG__ATLASSIAN_USER_EMAIL=${{ secrets.ATLASSIAN_USER_EMAIL }}" >> .sail-env
+          echo "OCEAN__INTEGRATION__CONFIG__ATLASSIAN_USER_TOKEN=${{ secrets.ATLASSIAN_USER_TOKEN }}" >> .sail-env
+          
+          docker run -i --rm --platform=linux/amd64 --env-file .sail-env $image_name
+          
+          echo "exit_code=$?" >> $GITHUB_ENV
