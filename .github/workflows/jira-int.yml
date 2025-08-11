@@ -32,26 +32,10 @@ jobs:
           echo "OCEAN__INTEGRATION__CONFIG__ATLASSIAN_USER_EMAIL=${{ secrets.ATLASSIAN_USER_EMAIL }}" >> .sail-env
           echo "OCEAN__INTEGRATION__CONFIG__ATLASSIAN_USER_TOKEN=${{ secrets.ATLASSIAN_USER_TOKEN }}" >> .sail-env
 
-          # Mapping config: link components to repositories
-          cat <<EOF >> .sail-env
-          OCEAN__INTEGRATION__CONFIG__CONFIG={
-            "resources": {
-              "jira_issue": {
-                "mappings": {
-                  "identifier": "key",
-                  "title": "fields.summary",
-                  "properties": {
-                    "status": "fields.status.name",
-                    "assignee": "fields.assignee.displayName"
-                  },
-                  "relations": {
-                    "repository": "{% for component in fields.components %}{{ component.name }}{% if not loop.last %},{% endif %}{% endfor %}"
-                  }
-                }
-              }
-            }
-          }
-          EOF
+          ## Single-line JSON for mapping
+          MAPPING_JSON='{"resources":{"jira_issue":{"mappings":{"identifier":"key","title":"fields.summary","properties":{"status":"fields.status.name","assignee":"fields.assignee.displayName"},"relations":{"repository":"{% for component in fields.components %}{{ component.name }}{% if not loop.last %},{% endif %}{% endfor %}"}}}}}'
+
+          echo "OCEAN__INTEGRATION__CONFIG__CONFIG=$MAPPING_JSON" >> .sail-env
           
           docker run -i --rm --platform=linux/amd64 --env-file .sail-env $image_name
           
