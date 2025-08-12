@@ -31,11 +31,6 @@ jobs:
           echo "OCEAN__INTEGRATION__CONFIG__JIRA_HOST=https://sjayb.atlassian.net" >> .sail-env
           echo "OCEAN__INTEGRATION__CONFIG__ATLASSIAN_USER_EMAIL=${{ secrets.ATLASSIAN_USER_EMAIL }}" >> .sail-env
           echo "OCEAN__INTEGRATION__CONFIG__ATLASSIAN_USER_TOKEN=ATCTT3xFfGN0QI9dQG5dB62WK6zXRC3Ib4UZTK6LEqI8YB90rb8X3CMTuy9MEVIyNMtRslV5EYdRbQnDThKHLyjzqDWhWekcxZjPagI6qTa-N6tDCqn0d-dD2FZw7Irc_l2lYZ3si572cCpelxMTAVFQsHJXHguxmfntqRpvkb5dZLTKN9-GxpE=5776A39A" >> .sail-env
-
-          ## Single-line JSON for mapping
-          #MAPPING_JSON='{"resources":{"jira_issue":{"mappings":{"identifier":"key","title":"fields.summary","properties":{"status":"fields.status.name","assignee":"fields.assignee.displayName"},"relations":{"repository":"{% for component in fields.components %}{{ component.name }}{% if not loop.last %},{% endif %}{% endfor %}"}}}}}'
-
-          #echo "OCEAN__INTEGRATION__CONFIG__CONFIG=$MAPPING_JSON" >> .sail-env
           
           docker run -i --rm --platform=linux/amd64 --env-file .sail-env $image_name
           

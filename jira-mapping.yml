@@ -1,0 +1,96 @@
+resources:
+  - kind: user
+    selector:
+      query: 'true'
+    port:
+      entity:
+        mappings:
+          identifier: (.accountId // "") # Changed: Added null-safe fallback
+          title: (.displayName // "") # Changed: Added null-safe fallback
+          blueprint: '"jiraUser"'
+          properties:
+            emailAddress: (.emailAddress // "") # Changed: Added null-safe fallback
+            displayName: (.displayName // "") # Changed: Added null-safe fallback
+            active: (.active // false) # Changed: Added null-safe boolean fallback
+            accountType: (.accountType // "") # Changed: Added null-safe fallback
+
+  - kind: project
+    selector:
+      query: 'true'
+    port:
+      entity:
+        mappings:
+          identifier: (.key // "") # Changed: Added null-safe fallback
+          title: (.name // "") # Changed: Added null-safe fallback
+          blueprint: '"jiraProject"'
+          properties:
+            url: ("https://sjayb.atlassian.net/projects/" + (.key // "")) # Changed: Safe URL concatenation instead of split()
+
+  - kind: issue
+    selector:
+      query: 'true'
+      jql: (statusCategory != Done) OR (created >= -1w) OR (updated >= -1w)
+    port:
+      entity:
+        mappings:
+          identifier: (.key // "") # Changed: Added null-safe fallback
+          title: (.fields.summary // "") # Changed: Added null-safe fallback
+          blueprint: '"jiraIssue"'
+          properties:
+            url: ("https://sjayb.atlassian.net/browse/" + (.key // "")) # Changed: Safe URL concatenation
+            status: (.fields.status.name // "") # Changed: Added null-safe fallback
+            issueType: (.fields.issuetype.name // "") # Changed: Added null-safe fallback
+            components: (.fields.components // []) # Changed: Added empty array fallback
+            creator: (.fields.creator.emailAddress // "") # Changed: Added null-safe fallback
+            priority: (.fields.priority.name // "") # Changed: Added null-safe fallback
+            labels: (.fields.labels // []) # Changed: Added empty array fallback
+            created: (.fields.created // "") # Changed: Added null-safe fallback
+            updated: (.fields.updated // "") # Changed: Added null-safe fallback
+            resolutionDate: (.fields.resolutiondate // "") # Changed: Added null-safe fallback
+          relations:
+            project: (.fields.project.key // "") # Changed: Added null-safe fallback
+            parentIssue: (.fields.parent.key // "") # Changed: Added null-safe fallback
+            subtasks: (.fields.subtasks // []) | map(.key) # Changed: Added empty array fallback before map()
+            jira_user_assignee: (.fields.assignee.accountId // "") # Changed: Added null-safe fallback
+            jira_user_reporter: (.fields.reporter.accountId // "") # Changed: Added null-safe fallback
+            assignee:
+              combinator: '"or"'
+              rules:
+                - property: '"jira_user_id"'
+                  operator: '"="'
+                  value: (.fields.assignee.accountId // "") # Changed: Added null-safe fallback
+                - property: '"$identifier"'
+                  operator: '"="'
+                  value: (.fields.assignee.email // "") # Changed: Added null-safe fallback
+            reporter:
+              combinator: '"or"'
+              rules:
+                - property: '"jira_user_id"'
+                  operator: '"="'
+                  value: (.fields.reporter.accountId // "") # Changed: Added null-safe fallback
+                - property: '"$identifier"'
+                  operator: '"="'
+                  value: (.fields.reporter.email // "") # Changed: Added null-safe fallback
+
+  - kind: issue
+    selector:
+      query: 'true'
+      jql: (statusCategory != Done) OR (created >= -1w) OR (updated >= -1w)
+    port:
+      entity:
+        mappings:
+          identifier: (.key // "") # Changed: Added null-safe fallback
+          title: (.fields.summary // "") # Changed: Added null-safe fallback
+          blueprint: '"jiraIssue"'
+          relations:
+            linkedrepo: # Changed: Replaced github_repository with linked_repo
+              combinator: '"and"'
+              rules:
+                - property: '"$title"'
+                  operator: '"contains"'
+                  value: (.key // "") # Changed: Added null-safe fallback
+
+# Changed: Enabled these settings for safe entity handling
+deleteDependentEntities: true
+createMissingRelatedEntities: true
+enableMergeEntity: true
