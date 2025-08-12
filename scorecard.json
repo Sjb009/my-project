@@ -1,0 +1,44 @@
+{
+    "identifier": "open_pr_score",
+    "title": "Open PRs Health",
+    "levels": [
+      { "color": "gold", "title": "Gold" },
+      { "color": "silver", "title": "Silver" },
+      { "color": "bronze", "title": "Bronze" }
+    ],
+    "rules": [
+      {
+        "identifier": "gold_level",
+        "title": "Gold",
+        "level": "Gold",
+        "query": {
+          "combinator": "and",
+          "conditions": [
+            { "operator": "<", "property": "open_pr_count", "value": 5 }
+          ]
+        }
+      },
+      {
+        "identifier": "silver_level",
+        "title": "Silver",
+        "level": "Silver",
+        "query": {
+          "combinator": "and",
+          "conditions": [
+            { "operator": "<", "property": "open_pr_count", "value": 10 }
+          ]
+        }
+      },
+      {
+        "identifier": "bronze_level",
+        "title": "Bronze",
+        "level": "Bronze",
+        "query": {
+          "combinator": "and",
+          "conditions": [
+            { "operator": "<", "property": "open_pr_count", "value": 15 }
+          ]
+        }
+      }
+    ]
+  }

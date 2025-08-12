@@ -1,0 +1,80 @@
+{
+    "identifier": "githubRepository",
+    "title": "Repository",
+    "icon": "Github",
+    "ownership": {
+      "type": "Direct"
+    },
+    "schema": {
+      "properties": {
+        "readme": {
+          "title": "README",
+          "type": "string",
+          "format": "markdown"
+        },
+        "url": {
+          "icon": "DefaultProperty",
+          "title": "Repository URL",
+          "type": "string",
+          "format": "url"
+        },
+        "defaultBranch": {
+          "title": "Default branch",
+          "type": "string"
+        },
+        "last_contributor": {
+          "title": "Last contributor",
+          "icon": "TwoUsers",
+          "type": "string",
+          "format": "user"
+        },
+        "last_push": {
+          "icon": "GitPullRequest",
+          "title": "Last push",
+          "description": "Last commit to the main branch",
+          "type": "string",
+          "format": "date-time"
+        },
+        "require_code_owner_review": {
+          "title": "Require code owner review",
+          "type": "boolean",
+          "icon": "DefaultProperty",
+          "description": "Requires review from code owners before a pull request can be merged"
+        },
+        "require_approval_count": {
+          "title": "Require approvals",
+          "type": "number",
+          "icon": "DefaultProperty",
+          "description": "The number of approvals required before merging a pull request"
+        }
+      },
+      "required": []
+    },
+  "mirrorProperties": {},
+  "calculationProperties": {},
+  "aggregationProperties": {
+    "open_pr_count": {
+      "title": "Open PR Count",
+      "type": "number",
+      "calculationSpec": {
+        "type": "aggregation",
+        "aggregation": {
+          "type": "count",
+          "target": "githubPullRequest",
+          "relationship": "repository",
+          "filter": {
+            "status": "open"
+          }
+        }
+      }
+    }
+  },
+    "relations": {
+      "githubTeams": {
+        "title": "GitHub Teams",
+        "target": "githubTeam",
+        "required": false,
+        "many": true
+      }
+    }
+  }
