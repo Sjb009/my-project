@@ -1,3 +1,26 @@
+## Question 1.
+Screenshots indicating answers are attached
+** .status.replicas
+** .status  Navigate to the deployment’s status object.
+** .replicas Returns the number of replicas currently running, which is the actual state, not just the desired count.
+  #for k8-deploy.json
+** .fields.subtasks | map(.key)
+** .fields.subtasks accesses the array of subtask objects.
+map(.key) transforms each object to its key value (e.g., "SAMPLE-123").
+Returns a JSON array of all subtask IDs.
+
+## Question 2
+https://sjayb.atlassian.net/jira/software/c/projects/SAV/components
+
+Also attached are pictures showing successful integration
+
+## Question 3
+Logic file attached alongside repo file named scorecard.json
+https://github.com/Sjb009/my-project
+
+
+
+## Question 4
 1. Check that the GitHub App in Port is installed correctly
 Go to Port → Integrations → GitHub and verify:
 

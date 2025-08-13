@@ -2,9 +2,23 @@
     "identifier": "open_pr_score",
     "title": "Open PRs Health",
     "levels": [
-      { "color": "gold", "title": "Gold" },
-      { "color": "silver", "title": "Silver" },
-      { "color": "bronze", "title": "Bronze" }
+        {
+          "color": "paleBlue",
+          "title": "Basic"
+        },
+        {
+          "color": "bronze",
+          "title": "Bronze"
+        },
+        {
+          "color": "silver",
+          "title": "Silver"
+        },
+        {
+          "color": "gold",
+          "title": "Gold"
+        }
+    
     ],
     "rules": [
       {
